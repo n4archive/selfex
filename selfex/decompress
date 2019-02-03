@@ -1,0 +1,21 @@
+#!/bin/bash
+echo ""
+echo "Self-Ex for Bash 1.0"
+echo ""
+echo "Project home:"
+echo "https://github.com/nift4/selfex/tree/bash/README.md"
+echo ""
+TMPDIR=`mktemp -d ./.tmp_selfextract.XXXXXX`
+ARCHIVE=`awk '/^__ARCHIVE_BELOW__/ {print NR + 1; exit 0; }' $0`
+tail -n+$ARCHIVE $0 | tar xzv -C $TMPDIR > /dev/null
+CDIR=`pwd`
+cd $TMPDIR
+echo "Running self-extracted software..."
+echo "======================================="
+SELFEX=true ./__selfex_entry__
+echo "======================================="
+echo "Finished running self-extracted software."
+cd $CDIR
+rm -rf $TMPDIR
+exit 0
+__ARCHIVE_BELOW__
